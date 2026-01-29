@@ -5,13 +5,16 @@ from typing import List
 
 import matplotlib.pyplot as plt
 import numpy as np
-from ipywidgets import interactive
-import ipywidgets as widgets
+import os
 
 
 def plot_tracks(
         tracks: List[np.ndarray],
-        grid: bool = False,):
+        shape: tuple,
+        result_folder,
+        grid: bool = False,
+        show: bool = True
+        ):
     
     '''Plot tracks of fibres detected in the volume
 
@@ -39,12 +42,35 @@ def plot_tracks(
 
 
     '''
-    fig, ax = plt.subplots(figsize=(10, 10))
-    ax = fig.add_subplot(projection='3d')
+
+    fig = plt.figure(figsize=(10, 10))
+    ax = fig.add_subplot(111, projection="3d")
+
+    n_tracks = sum(t is not None and len(t) > 0 for t in tracks)
+
     for track in tracks:
-        ax.plot(track[:,0], track[:,1], track[:,2])
+        if track is None or len(track) == 0:
+            continue
+        ax.plot(track[:, 0], track[:, 1], track[:, 2])
+
     ax.grid(grid)
-    ax.set_aspect('equal')
-    
-    plt.show()
+    ax.set_box_aspect((shape[2], shape[1], shape[0]))
+
+    ax.text2D(
+        0.02, 0.98,
+        f"Found Tracks: {n_tracks}",
+        transform=ax.transAxes,
+        va="top",
+        fontsize=20,
+        bbox=dict(facecolor="white", alpha=0.7, edgecolor="none")
+    )
+
+
+    plt.savefig(os.path.join(result_folder, "tracks_3D.png"), bbox_inches="tight", dpi=300)
+
+    if show:
+        plt.show()
+    else:
+        plt.close(fig)
+
     return fig
