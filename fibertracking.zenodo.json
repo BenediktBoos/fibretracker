@@ -1,0 +1,10 @@
+{ "creators": [
+    { "orcid": "0009-0007-0757-6503",
+      "affiliation": "Leibniz-Institut für Verbundwerkstoffe GmbH",
+      "name": "Benedikt Boos"
+    }
+ ],
+ "license": "MIT",
+ "title": "Fiber Tracking of Image Slices",
+ "keywords": ["CT", "Fiber", "Tracking", "post-processing"]
+}
